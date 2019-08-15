@@ -1,0 +1,5 @@
+body.animating.in.dimmable,
+body.dimmed.dimmable {
+  /* Prevent page jitter caused by the toggling scrollbar */
+  overflow: auto;
+}
