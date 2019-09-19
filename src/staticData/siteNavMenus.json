@@ -1,0 +1,38 @@
+[
+  {
+    "name": "pages",
+
+    "navItems": [
+      {
+        "name": "prospects",
+        "label": "Prospects"
+      },
+
+      {
+        "name": "appointments",
+        "label": "Appointments"
+      },
+
+      {
+        "name": "inspections",
+        "label": "Inspections"
+      }
+    ]
+  },
+
+  {
+    "name": "my-account",
+    "header": "My Account",
+
+    "navItems": [
+      {
+        "name": "help",
+        "label": "Help"
+      },
+      {
+        "name": "sign-out",
+        "label": "Sign Out"
+      }
+    ]
+  }
+]

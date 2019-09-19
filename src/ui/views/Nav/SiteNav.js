@@ -1,52 +1,72 @@
-import React, {Component} from 'react';
-import {Responsive, Button, Menu} from 'semantic-ui-react';
+import React from 'react';
+import siteNavMenus from 'staticData/siteNavMenus.json';
 import _ from 'lodash';
+import {Accordion, Menu, Divider, Container} from 'semantic-ui-react';
 
-export default function SiteNav({activeNav}) {
-  const [pendingNav, setPendingNav] = useState(null);
+export default function ({activeNav, onClickNav}) {
+  const [navOpen, setNavOpen] = React.useState(false);
 
-  function handleClickNavItem(e, {name}) {
-    setPendingNav(name);
+  if (!activeNav) {
+    activeNav = siteNavMenus[0].navItems[0].name;
   }
 
-  const navItems = [
+  let currentNavItem;
+  _.find(siteNavMenus, menu_config => {
+    const result = _.find(menu_config.navItems, it => it.name === activeNav);
+    if (result) {
+      currentNavItem = result;
+      return true;
+    }
+  });
+
+  function handleClickNavItem(e, {name}) {
+    // TODO:
+  }
+
+  const panels = [
+    {
+      key: 'nav',
+      title: `Pages`,
+      content: {
+        content: (
+          <Container>
+            {_.map(siteNavMenus, menu_config => {
+              return (
+                <Container key={menu_config.name}>
+                  <Menu text vertical>
+                    {menu_config.header && (
+                      <Menu.Item header key="__menu_header__">
+                        {menu_config.header}
+                      </Menu.Item>
+                    )}
+
+                    {_.map(menu_config.navItems, item => {
+                      return (
+                        <Menu.Item key={item.name}
+                          active={activeNav === item.name}
+                          content={item.label}
+                          name={item.name}
+                          onClick={handleClickNavItem}
+                        />
+                      );
+                    })}
+                  </Menu>
+
+                  <Divider hidden />
+                </Container>
+              );
+            })}
+          </Container>
+        )
+      }
+    }
   ];
 
-  const activeItem = _.find(navItems, it => it.name === activeNav);
-
   return (
-    <Menu>
-      <Menu.Item
-        active={activeNav === 'home'}
-        content='Home'
-        name='home'
-        onClick={this.handleItemClick}
-      />
-      <Menu.Item
-        active={activeNav === 'messages'}
-        content='Messages'
-        name='messages'
-        onClick={this.handleItemClick}
-      />
-
-      <Menu.Menu position='right'>
-        <Menu.Item>
-          <Responsive
-            {...Responsive.onlyMobile}
-            as={Button}
-            content='Switch to desktop version'
-            icon='desktop'
-            labelPosition='left'
-          />
-          <Responsive
-            as={Button}
-            content='Switch to mobile version'
-            icon='mobile'
-            labelPosition='left'
-            minWidth={Responsive.onlyTablet.minWidth}
-          />
-        </Menu.Item>
-      </Menu.Menu>
-    </Menu>
+    <Container>
+      <Accordion defaultIndex={-1} panels={panels} />
+      <Divider hidden />
+      <Divider hidden />
+    </Container>
   );
 }

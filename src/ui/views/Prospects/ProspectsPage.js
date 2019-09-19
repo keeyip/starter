@@ -4,6 +4,8 @@ import _ from 'lodash';
 import ProspectsExplorer from 'ui/views/Prospects/ProspectsExplorer';
 import {PROSPECTS_EXPLORER_MAP_LENS_KEY} from 'ui/views/Prospects/ProspectsExplorer';
 import {fetchProspects} from 'lib/queries';
+import SiteNav from 'ui/views/Nav/SiteNav';
+import Page from 'ui/views/Page';
 
 /**
   The page starts at STARTUP,
@@ -64,71 +66,74 @@ export default function ProspectsPage() {
   }
 
   return (
-    <ProspectsExplorer
-      loading={pageStatus !== PAGE_STATUS_READY}
-      hideDefaultMessage={pageStatus === PAGE_STATUS_STARTUP}
+    <Page>
+      <SiteNav />
+      <ProspectsExplorer
+        loading={pageStatus !== PAGE_STATUS_READY}
+        hideDefaultMessage={pageStatus === PAGE_STATUS_STARTUP}
 
-      prospects={prospects}
+        prospects={prospects}
 
-      totalPages={totalPages}
-      currentPage={currentPage}
+        totalPages={totalPages}
+        currentPage={currentPage}
 
-      onChangePage={nextPage => {
-        setPageStatus(PAGE_STATUS_QUERYING);
+        onChangePage={nextPage => {
+          setPageStatus(PAGE_STATUS_QUERYING);
 
-        fetchProspects({
-          currentPage: nextPage,
-          perPage,
-          filteredStates
-        })
-        .then(update);
-      }}
+          fetchProspects({
+            currentPage: nextPage,
+            perPage,
+            filteredStates
+          })
+          .then(update);
+        }}
 
-      activeLensKey={activeLensKey}
+        activeLensKey={activeLensKey}
 
-      onSwitchToLens={selectedLens => {
-        setPageStatus(PAGE_STATUS_QUERYING);
+        onSwitchToLens={selectedLens => {
+          setPageStatus(PAGE_STATUS_QUERYING);
 
-        fetchProspects({
-          currentPage,
-          perPage,
+          fetchProspects({
+            currentPage,
+            perPage,
 
-          filteredStates,
+            filteredStates,
 
-          // The map needs a non-paginated result set, otherwise
-          // we would see markers only for prospects on the current page.
-          fetchAll: selectedLens.key === PROSPECTS_EXPLORER_MAP_LENS_KEY
-        })
-        .then(queryResult => update(queryResult, selectedLens.key));
-      }}
+            // The map needs a non-paginated result set, otherwise
+            // we would see markers only for prospects on the current page.
+            fetchAll: selectedLens.key === PROSPECTS_EXPLORER_MAP_LENS_KEY
+          })
+          .then(queryResult => update(queryResult, selectedLens.key));
+        }}
 
-      filteredStates={filteredStates}
+        filteredStates={filteredStates}
 
-      onDeleteStateFilter={state => {
-        setPageStatus(PAGE_STATUS_QUERYING);
+        onDeleteStateFilter={state => {
+          setPageStatus(PAGE_STATUS_QUERYING);
 
-        fetchProspects({
-          // Be sure to jump back to page 1, it's a different result set
-          currentPage: 1,
-          perPage,
+          fetchProspects({
+            // Be sure to jump back to page 1, it's a different result set
+            currentPage: 1,
+            perPage,
 
-          filteredStates: _.without(filteredStates, state)
-        })
-        .then(update);
-      }}
+            filteredStates: _.without(filteredStates, state)
+          })
+          .then(update);
+        }}
 
-      onAddStateFilter={state => {
-        setPageStatus(PAGE_STATUS_QUERYING);
+        onAddStateFilter={state => {
+          setPageStatus(PAGE_STATUS_QUERYING);
 
-        fetchProspects({
-          // Be sure to jump back to page 1, it's a different result set
-          currentPage: 1,
-          perPage,
+          fetchProspects({
+            // Be sure to jump back to page 1, it's a different result set
+            currentPage: 1,
+            perPage,
 
-          filteredStates: _.uniq(filteredStates.concat(state))
-        })
-        .then(update);
-      }}
-    />
+            filteredStates: _.uniq(filteredStates.concat(state))
+          })
+          .then(update);
+        }}
+      />
+    </Page>
   );
 }
