@@ -2,6 +2,7 @@ import React from 'react';
 import siteNavMenus from 'staticData/siteNavMenus.json';
 import _ from 'lodash';
 import {Accordion, Menu, Divider, Segment, Container} from 'semantic-ui-react';
+import {Link} from '@reach/router';
 
 export default function ({activeNav, onClickNav}) {
   const [navOpen, setNavOpen] = React.useState(false);
@@ -44,6 +45,9 @@ export default function ({activeNav, onClickNav}) {
                       return (
                         <Menu.Item key={item.name}
                           active={activeNav === item.name}
+                          as={Link}
+                          to={item.path}
+                          link={true}
                           content={item.label}
                           name={item.name}
                           onClick={handleClickNavItem}

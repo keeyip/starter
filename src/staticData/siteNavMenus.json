@@ -5,17 +5,20 @@
     "navItems": [
       {
         "name": "upcoming",
-        "label": "Upcoming"
+        "label": "Upcoming",
+        "path": "/upcoming"
       },
 
       {
         "name": "leads",
-        "label": "Leads"
+        "label": "Leads",
+        "path": "/leads"
       },
 
       {
         "name": "customers",
-        "label": "Customers"
+        "label": "Customers",
+        "path": "/customers"
       }
     ]
   },
@@ -27,11 +30,13 @@
     "navItems": [
       {
         "name": "help",
-        "label": "Help"
+        "label": "Help",
+        "path": "/help"
       },
       {
         "name": "sign-out",
-        "label": "Sign Out"
+        "label": "Sign Out",
+        "path": "/sign-out"
       }
     ]
   }
