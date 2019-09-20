@@ -4,12 +4,6 @@
 
     "navItems": [
       {
-        "name": "upcoming",
-        "label": "Upcoming",
-        "path": "/upcoming"
-      },
-
-      {
         "name": "leads",
         "label": "Leads",
         "path": "/leads"
