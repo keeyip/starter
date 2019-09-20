@@ -17,7 +17,7 @@ import {
 
 /**
   This module contains functions to generate sample prospects that
-  conform to the data structures expected in `lib/models.js`
+  conform to the data structures expected in `lib/model.js`
 **/
 
 /**

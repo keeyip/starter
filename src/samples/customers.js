@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {getCustomerOrder} from 'lib/models';
+import {getCustomerOrder} from 'lib/model';
 
 /**
   This module contains functions to generate sample customers that
-  conform to the data structures expected in `lib/models.js`
+  conform to the data structures expected in `lib/model.js`
 **/
 
 /**
