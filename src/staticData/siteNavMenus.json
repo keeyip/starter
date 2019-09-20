@@ -1,6 +1,7 @@
 [
   {
-    "name": "pages",
+    "name": "manage",
+    "header": "Manage",
 
     "navItems": [
       {

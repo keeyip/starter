@@ -1,80 +1,73 @@
 import React from 'react';
 import siteNavMenus from 'staticData/siteNavMenus.json';
 import _ from 'lodash';
-import {Accordion, Menu, Divider, Segment, Container} from 'semantic-ui-react';
-import {Link} from '@reach/router';
+import {Accordion, Icon, Menu, Header, Divider, Segment, Container} from 'semantic-ui-react';
+import {Link, Match} from '@reach/router';
 
-export default function ({activeNav, onClickNav}) {
-  const [navOpen, setNavOpen] = React.useState(false);
+export default function () {
+  const [accordionOpen, setAccordionOpen] = React.useState(false);
 
-  if (!activeNav) {
-    activeNav = siteNavMenus[0].navItems[0].name;
+  function handleClickAccordion() {
+    setAccordionOpen(!accordionOpen);
   }
 
-  let currentNavItem;
-  _.find(siteNavMenus, menu_config => {
-    const result = _.find(menu_config.navItems, it => it.name === activeNav);
-    if (result) {
-      currentNavItem = result;
-      return true;
-    }
-  });
-
-  function handleClickNavItem(e, {name}) {
-    // TODO:
+  function closeAccordion() {
+    setAccordionOpen(false);
   }
-
-  const panels = [
-    {
-      key: 'nav',
-      title: `Main menu`,
-      content: {
-        content: (
-          <Segment>
-            {_.map(siteNavMenus, menu_config => {
-              return (
-                <Container key={menu_config.name}>
-                  <Menu text vertical>
-                    {menu_config.header && (
-                      <Menu.Item header key="__menu_header__">
-                        {menu_config.header}
-                      </Menu.Item>
-                    )}
-
-                    {_.map(menu_config.navItems, item => {
-                      return (
-                        <Menu.Item key={item.name}
-                          active={activeNav === item.name}
-                          as={Link}
-                          to={item.path}
-                          link={true}
-                          content={item.label}
-                          name={item.name}
-                          onClick={handleClickNavItem}
-                        />
-                      );
-                    })}
-                  </Menu>
-
-                  <Divider hidden />
-                </Container>
-              );
-            })}
-          </Segment>
-        )
-      }
-    }
-  ];
 
   return (
     <Container>
       <Segment inverted>
-        <Accordion
-          inverted
-          fluid
-          defaultIndex={-1}
-          panels={panels}
-        />
+        <Accordion inverted fluid>
+          <Accordion.Title active={accordionOpen} onClick={handleClickAccordion}>
+            <Icon name='dropdown' />
+            Main menu
+          </Accordion.Title>
+
+          <Accordion.Content active={accordionOpen}>
+            <Segment>
+              {_.map(siteNavMenus, menu_config => {
+                return (
+                  <Container key={menu_config.name}>
+                    {menu_config.header && (
+                      <Header size="medium">
+                        {menu_config.header}
+                      </Header>
+                    )}
+
+                    <Menu vertical fluid>
+                      {_.map(menu_config.navItems, item => {
+                        return (
+                          <Match path={item.path}>
+                            {props => props.match ? (
+                              <Menu.Item key={item.name}
+                                active={true}
+                                as={'div'}
+                                content={item.label}
+                                name={item.name}
+                                onClick={closeAccordion}
+                              />
+                            ) : (
+                              <Menu.Item key={item.name}
+                                as={Link}
+                                to={item.path}
+                                link={true}
+                                content={item.label}
+                                name={item.name}
+                              />
+                            )}
+                          </Match>
+                        );
+                      })}
+                    </Menu>
+
+                    <Divider hidden />
+                  </Container>
+                );
+              })}
+            </Segment>
+          </Accordion.Content>
+        </Accordion>
       </Segment>
 
       <Divider hidden />
