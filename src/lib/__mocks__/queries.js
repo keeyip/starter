@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {generateSampleProspects} from 'samples/prospects';
+import {generateSampleCustomers} from 'samples/customers';
 
 /**
   This is an in-memory mocked version of `lib/queries.js`.
@@ -31,6 +32,42 @@ export function fetchProspects({currentPage, perPage, fetchAll, filteredStates})
       totalPages,
       filteredStates,
       prospects
+    };
+
+    resolve(result);
+  });
+}
+
+/**
+  This is an in-memory mocked version of `lib/queries.js`.
+**/
+
+export function fetchCustomers({currentPage, perPage, fetchAll, filteredStates}) {
+  const TOTAL_CUSTOMERS = 40;
+  const allCustomers = generateSampleCustomers(TOTAL_CUSTOMERS);
+
+  return new Promise((resolve, reject) => {
+    let filteredCustomers = allCustomers;
+    if (!_.isEmpty(filteredStates)) {
+      filteredCustomers = allCustomers.filter(customer => {
+        return filteredStates.indexOf(customer.location.state) >= 0;
+      });
+    }
+
+    let customers = filteredCustomers;
+    let totalPages;
+
+    if (!fetchAll) {
+      totalPages = Math.ceil(filteredCustomers.length / perPage);
+      const offset = (currentPage - 1) * perPage;
+      customers = filteredCustomers.slice(offset, offset + perPage);
+    }
+
+    const result = {
+      currentPage,
+      totalPages,
+      filteredStates,
+      customers
     };
 
     resolve(result);
