@@ -4,18 +4,18 @@
 
     "navItems": [
       {
-        "name": "prospects",
-        "label": "Prospects"
+        "name": "upcoming",
+        "label": "Upcoming"
       },
 
       {
-        "name": "appointments",
-        "label": "Appointments"
+        "name": "leads",
+        "label": "Leads"
       },
 
       {
-        "name": "inspections",
-        "label": "Inspections"
+        "name": "customers",
+        "label": "Customers"
       }
     ]
   },

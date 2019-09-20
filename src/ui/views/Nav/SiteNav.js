@@ -1,7 +1,7 @@
 import React from 'react';
 import siteNavMenus from 'staticData/siteNavMenus.json';
 import _ from 'lodash';
-import {Accordion, Menu, Divider, Container} from 'semantic-ui-react';
+import {Accordion, Menu, Divider, Segment, Container} from 'semantic-ui-react';
 
 export default function ({activeNav, onClickNav}) {
   const [navOpen, setNavOpen] = React.useState(false);
@@ -26,10 +26,10 @@ export default function ({activeNav, onClickNav}) {
   const panels = [
     {
       key: 'nav',
-      title: `Pages`,
+      title: `Main menu`,
       content: {
         content: (
-          <Container>
+          <Segment>
             {_.map(siteNavMenus, menu_config => {
               return (
                 <Container key={menu_config.name}>
@@ -56,7 +56,7 @@ export default function ({activeNav, onClickNav}) {
                 </Container>
               );
             })}
-          </Container>
+          </Segment>
         )
       }
     }
@@ -64,7 +64,15 @@ export default function ({activeNav, onClickNav}) {
 
   return (
     <Container>
-      <Accordion defaultIndex={-1} panels={panels} />
+      <Segment inverted>
+        <Accordion
+          inverted
+          fluid
+          defaultIndex={-1}
+          panels={panels}
+        />
+      </Segment>
+
       <Divider hidden />
       <Divider hidden />
     </Container>
