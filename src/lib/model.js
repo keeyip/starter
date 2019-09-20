@@ -19,6 +19,48 @@ A prospect looks like: {
   }
 }
 
+A customer looks like: {
+  uuid, name,
+
+  properties: []
+}
+
+A property looks like this: {
+  uuid, name?,
+
+  address,
+  inspections: []
+}
+
+An address looks like this: {
+  address_lines,
+
+  city,
+
+  // State Abbreviation
+  state,
+
+  zip_code,
+
+  // NOTE: The coordinates are defined as `[longitude, latitude]` (flipped)
+  // as a matter of convenience when working with `react-simple-maps`.
+  coordinates: [longitude, latitude]
+}
+
+An inspection looks like this: {
+  scheduled_start,
+  scheduled_end,
+
+  inspected_start,
+  inspected_end,
+
+  inspection_report
+}
+
+An inspection report looks like this: {
+  storage_url
+}
+
 **/
 
 export const PROSPECT_STATUS_NEW = 'New';
@@ -67,4 +109,8 @@ export function getProspectStatusColor(prospect) {
 
 export function getProspectStatusOrder(prospect) {
   return PROSPECT_STATUSES_ORDERED.indexOf(prospect.status);
+}
+
+export function getCustomerOrder(customer) {
+  return customer.name;
 }
