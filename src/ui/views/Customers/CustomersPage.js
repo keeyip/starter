@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
-import CustomersExplorer from 'ui/views/Customers/CustomersExplorer';
 import {fetchCustomers} from 'lib/queries';
 import SiteNav from 'ui/views/Nav/SiteNav';
 import Page from 'ui/views/Page';
+import DataCard from 'ui/core/DataCard';
+import {
+  Container,
+  Header,
+  Divider,
+  Tab,
+  Grid,
+  Segment
+} from 'semantic-ui-react';
 
 /**
   The page starts at STARTUP,
@@ -25,11 +33,6 @@ const PAGE_STATUS_READY = 'READY';
 export default function() {
   const [pageStatus, setPageStatus] = React.useState(PAGE_STATUS_STARTUP);
   const [customers, setCustomers] = React.useState([]);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [activeLensKey, setActiveLensKey] = React.useState(1);
-
-  const perPage = 10;
 
   /**
     Updates element state based on `queryResult`,
@@ -45,56 +48,44 @@ export default function() {
     // NOTE: `unstable_batchedUpdates()` is necessary for now but can be removed
     // in a future version of React.
     ReactDOM.unstable_batchedUpdates(() => {
-      setCurrentPage(queryResult.currentPage);
-      setTotalPages(queryResult.totalPages);
       setCustomers(queryResult.customers);
-      setActiveLensKey(nextActiveLensKey || activeLensKey);
       setPageStatus(PAGE_STATUS_READY);
     });
   }
 
   if (pageStatus === PAGE_STATUS_STARTUP) {
-    fetchCustomers({
-      currentPage,
-      perPage,
-    })
-    .then(update);
+    fetchCustomers({fetchAll: true}).then(update);
   }
 
   return (
     <Page>
       <SiteNav />
-      <CustomersExplorer
-        loading={pageStatus !== PAGE_STATUS_READY}
-        hideDefaultMessage={pageStatus === PAGE_STATUS_STARTUP}
 
-        customers={customers}
-
-        totalPages={totalPages}
-        currentPage={currentPage}
-
-        onChangePage={nextPage => {
-          setPageStatus(PAGE_STATUS_QUERYING);
-
-          fetchCustomers({
-            currentPage: nextPage,
-            perPage,
-          })
-          .then(update);
-        }}
-
-        activeLensKey={activeLensKey}
-
-        onSwitchToLens={selectedLens => {
-          setPageStatus(PAGE_STATUS_QUERYING);
-
-          fetchCustomers({
-            currentPage,
-            perPage,
-          })
-          .then(queryResult => update(queryResult, selectedLens.key));
-        }}
-      />
+      <Container>
+        <Header>Confirmed Appointments</Header>
+        <Header>Recent Inspections</Header>
+        <Header>Customers List</Header>
+        <Header>King County</Header>
+        <Segment>
+          <Header>Kent</Header>
+          <Grid stackable columns={3}>
+            {_.map(customers, customer => {
+              return (
+                <Grid.Column>
+                  <DataCard key={customer.uuid}
+                    header={customer.name}
+                    meta={"10 properties in Kent"}
+                    fluid
+                  />
+                </Grid.Column>
+              );
+            })}
+          </Grid>
+        </Segment>
+        <Header>Renton</Header>
+        <Header>Seattle</Header>
+        <Header>Yakima County</Header>
+      </Container>
     </Page>
   );
 }
