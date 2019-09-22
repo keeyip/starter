@@ -6,11 +6,13 @@ import SiteNav from 'ui/views/Nav/SiteNav';
 import Page from 'ui/views/Page';
 import DataCard from 'ui/core/DataCard';
 import {
+  Icon,
   Container,
   Header,
   Divider,
   Tab,
   Grid,
+  Accordion,
   Segment
 } from 'semantic-ui-react';
 
@@ -33,6 +35,16 @@ const PAGE_STATUS_READY = 'READY';
 export default function() {
   const [pageStatus, setPageStatus] = React.useState(PAGE_STATUS_STARTUP);
   const [customers, setCustomers] = React.useState([]);
+
+  const [openCity, setOpenCity] = React.useState(null);
+
+  function handleClickCity(city) {
+    if (openCity === city) {
+      setOpenCity(null);
+    } else {
+      setOpenCity(city);
+    }
+  }
 
   /**
     Updates element state based on `queryResult`,
@@ -66,24 +78,45 @@ export default function() {
         <Header>Recent Inspections</Header>
         <Header>Customers List</Header>
         <Header>King County</Header>
-        <Segment>
-          <Header>Kent</Header>
-          <Grid stackable columns={3}>
-            {_.map(customers, customer => {
-              return (
-                <Grid.Column>
-                  <DataCard key={customer.uuid}
-                    header={customer.name}
-                    meta={"10 properties in Kent"}
-                    fluid
-                  />
-                </Grid.Column>
-              );
-            })}
-          </Grid>
-        </Segment>
-        <Header>Renton</Header>
-        <Header>Seattle</Header>
+
+        <Accordion styled fluid>
+          <Accordion.Title active={openCity === 'kent:king-county'} onClick={() => handleClickCity('kent:king-county')}>
+            <Icon name='dropdown' />
+            Kent
+          </Accordion.Title>
+
+          <Accordion.Content active={openCity === 'kent:king-county'}>
+            <Grid stackable columns={2}>
+              {_.map(customers, customer => {
+                return (
+                  <Grid.Column>
+                    <DataCard key={customer.uuid}
+                      header={customer.name}
+                      meta={"10 properties in Kent"}
+                    />
+                  </Grid.Column>
+                );
+              })}
+            </Grid>
+          </Accordion.Content>
+
+          <Accordion.Title active={openCity === 'renton:king-county'} onClick={() => handleClickCity('renton:king-county')}>
+            <Icon name='dropdown' />
+            Renton
+          </Accordion.Title>
+
+          <Accordion.Content active={openCity === 'renton:king-county'}>
+          </Accordion.Content>
+
+          <Accordion.Title active={openCity === 'seattle:king-county'} onClick={() => handleClickCity('seattle:king-county')}>
+            <Icon name='dropdown' />
+            Seattle
+          </Accordion.Title>
+
+          <Accordion.Content active={openCity === 'seattle:king-county'}>
+          </Accordion.Content>
+        </Accordion>
+
         <Header>Yakima County</Header>
       </Container>
     </Page>
